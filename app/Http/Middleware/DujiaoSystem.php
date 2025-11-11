@@ -8,24 +8,15 @@ use Closure;
 class DujiaoSystem
 {
     /**
-     * Handle an incoming request.
+     * 系统环境初始化（已移除 Dcat 相关配置）
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * Purpose: previously forced HTTPS for Dcat Admin via config('admin').
+     * With Filament migration complete, this middleware no longer alters
+     * admin configuration. It simply passes the request through.
      */
     public function handle($request, Closure $next)
     {
-        // 检测https
-        if ($request->getScheme() == 'https') {
-            $httpsConfig = [
-                'https' => true
-            ];
-            config([
-                'admin'  =>  array_merge(config('admin'), $httpsConfig)
-            ]);
-            (new AppServiceProvider(app()))->register();
-        }
+        // No-op: Dcat Admin config removed. Keep middleware lightweight.
         return $next($request);
     }
 }

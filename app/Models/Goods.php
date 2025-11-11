@@ -89,8 +89,8 @@ class Goods extends BaseModel
     public static function getGoodsTypeMap()
     {
         return [
-            self::AUTOMATIC_DELIVERY => admin_trans('goods.fields.automatic_delivery'),
-            self::MANUAL_PROCESSING => admin_trans('goods.fields.manual_processing')
+            self::AUTOMATIC_DELIVERY => __('goods.fields.automatic_delivery'),
+            self::MANUAL_PROCESSING => __('goods.fields.manual_processing')
         ];
     }
 

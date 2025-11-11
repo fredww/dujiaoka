@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Pay;
 
-
-use AmrShawky\LaravelCurrency\Facade\Currency;
 use App\Exceptions\RuleValidationException;
 use App\Http\Controllers\PayController;
 use Illuminate\Http\Request;
@@ -26,6 +24,11 @@ class PaypalPayController extends PayController
 
     const Currency = 'USD'; //货币单位
 
+    /**
+     * 支付网关入口（PayPal）。
+     *
+     * 说明：新版本面向欧美用户，移除货币汇率转换，直接使用订单金额（USD）。
+     */
     public function gateway(string $payway, string $orderSN)
     {
         try {
@@ -39,13 +42,9 @@ class PaypalPayController extends PayController
             );
             $paypal->setConfig(['mode' => 'live']);
             $product = $this->order->title;
-            // 得到汇率
-            $total = Currency::convert()
-                ->from('CNY')
-                ->to('USD')
-                ->amount($this->order->actual_price)
-                ->round(2)
-                ->get();
+            // Use order amount directly in USD (no conversion)
+            // Ensure two decimals for PayPal API compatibility
+            $total = number_format((float) $this->order->actual_price, 2, '.', '');
             $shipping = 0;
             $description = $this->order->title;
             $payer = new Payer();
@@ -135,6 +134,11 @@ class PaypalPayController extends PayController
 
     }
 
+    /**
+     * 获取原始 JSON 请求体。
+     *
+     * 说明：用于解析 PayPal 异步通知数据。
+     */
     private function get_JsonData()
     {
         $json = file_get_contents('php://input');

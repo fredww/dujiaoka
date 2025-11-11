@@ -36,4 +36,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * 允许访问后台面板
+     *
+     * Purpose: control whether the user can access Filament admin panel.
+     */
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        // Allow all authenticated users to access the admin panel
+        return true;
+    }
 }

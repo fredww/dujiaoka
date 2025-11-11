@@ -173,10 +173,10 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
 
         Jenssegers\Agent\AgentServiceProvider::class,
-        Germey\Geetest\GeetestServiceProvider::class
 
 
     ],
@@ -231,7 +231,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
-        'Geetest' => Germey\Geetest\Geetest::class,
     ],
 
 ];

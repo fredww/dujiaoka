@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
+// 该异常处理器负责报告与渲染异常，兼容 Laravel 10 的 Throwable 签名
+// This handler reports and renders exceptions; updated to use Throwable for Laravel 10.
+use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -27,34 +29,31 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * 报告或记录异常
      * Report or log an exception.
-     *
-     * @param  \Exception  $exception
-     * @return void
-     *
-     * @throws \Exception
      */
-    public function report(Exception $exception)
+    public function report(Throwable $e): void
     {
-        parent::report($exception);
+        // Delegate to base handler
+        parent::report($e);
     }
 
     /**
+     * 将异常渲染为 HTTP 响应
      * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Exception
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $e)
     {
-        if ($exception instanceof AppException) {
+        // Custom app exception rendering
+        if ($e instanceof AppException) {
             $layout = dujiaoka_config_get('template', 'layui');
             $tplPath = $layout . '/errors/error';
-            return view($tplPath, ['title' => __('dujiaoka.error_title'), 'content' => $exception->getMessage(), 'url' => ""]);
+            return view($tplPath, [
+                'title' => __('dujiaoka.error_title'),
+                'content' => $e->getMessage(),
+                'url' => "",
+            ]);
         }
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 }

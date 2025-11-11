@@ -13,6 +13,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
+    /**
+     * 全局取消批量赋值保护
+     * 
+     * Purpose: allow Filament forms to mass-assign model attributes safely.
+     */
+    protected $guarded = [];
 
     const STATUS_OPEN = 1; // 状态开启
     const STATUS_CLOSE = 0; // 状态关闭
@@ -32,8 +38,8 @@ class BaseModel extends Model
     public static function getIsOpenMap()
     {
         return [
-            self::STATUS_OPEN => admin_trans('dujiaoka.status_open'),
-            self::STATUS_CLOSE => admin_trans('dujiaoka.status_close')
+            self::STATUS_OPEN => __('dujiaoka.status_open'),
+            self::STATUS_CLOSE => __('dujiaoka.status_close')
         ];
     }
 

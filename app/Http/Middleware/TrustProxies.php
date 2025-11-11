@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Fideloper\Proxy\TrustProxies as Middleware;
+// 该中间件用于处理受信任代理头
+// This middleware configures trusted proxy headers.
+use Illuminate\Http\Middleware\TrustProxies as Middleware;
 use Illuminate\Http\Request;
 
 class TrustProxies extends Middleware
@@ -10,14 +12,19 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
-     * @var array|string
+     * @var array|string|null
      */
-    protected $proxies;
+    protected $proxies = null;
 
     /**
-     * The headers that should be used to detect proxies.
+     * 代理检测的头部设置
      *
-     * @var int
+     * Purpose: set trusted proxy header bitmask compatible with Symfony 7 / Laravel 11.
      */
-    protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    protected $headers =
+        Request::HEADER_X_FORWARDED_FOR |
+        Request::HEADER_X_FORWARDED_HOST |
+        Request::HEADER_X_FORWARDED_PORT |
+        Request::HEADER_X_FORWARDED_PROTO |
+        Request::HEADER_X_FORWARDED_PREFIX;
 }

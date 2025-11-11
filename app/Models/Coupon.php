@@ -49,8 +49,8 @@ class Coupon extends BaseModel
     public static function getStatusUseMap()
     {
         return [
-            self::STATUS_USE => admin_trans('coupon.fields.status_use'),
-            self::STATUS_UNUSED => admin_trans('coupon.fields.status_unused'),
+            self::STATUS_USE => __('coupon.fields.status_use'),
+            self::STATUS_UNUSED => __('coupon.fields.status_unused'),
         ];
     }
 

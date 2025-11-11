@@ -41,6 +41,12 @@ return [
             'provider' => 'users',
         ],
 
+        // Admin guard for Filament panel
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -71,6 +77,12 @@ return [
             'model' => App\User::class,
         ],
 
+        // Admin users provider backed by admin_users table
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AdminUser::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -99,6 +111,14 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+        // Optional password reset for admins (if needed)
+        // 'admins' => [
+        //     'provider' => 'admins',
+        //     'table' => 'password_resets',
+        //     'expire' => 60,
+        //     'throttle' => 60,
+        // ],
     ],
 
     /*

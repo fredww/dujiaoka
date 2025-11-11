@@ -31,6 +31,19 @@ class PayService
             ->whereIn('pay_client', [$payClient, Pay::PAY_CLIENT_ALL])
             ->where('is_open', Pay::STATUS_OPEN)
             ->get();
+        // If upgrade flags are enabled, restrict gateways to whitelisted providers
+        // 仅在升级标志开启时，限制支付网关为白名单中的提供方
+        if ($payGateway && config('upgrade.enabled')) {
+            $allowed = (array) config('upgrade.payment_whitelist', []);
+            $filtered = $payGateway->filter(function ($gw) use ($allowed) {
+                // Derive provider slug from handler route (e.g., 'pay/stripe' → 'stripe')
+                // 从处理路由中提取提供方标识
+                $route = (string) ($gw->pay_handleroute ?? '');
+                $slug = strtolower(trim(basename($route)));
+                return in_array($slug, $allowed, true);
+            });
+            return $filtered->isNotEmpty() ? $filtered->toArray() : null;
+        }
         return $payGateway ? $payGateway->toArray() : null;
     }
 

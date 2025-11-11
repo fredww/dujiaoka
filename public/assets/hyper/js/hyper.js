@@ -29,14 +29,19 @@ $(function() {
 		vzfb       : alipaySvg,
 		vwx        : weChatSvg,
 	};
-	// 付款方式按钮
+	// 中文：付款方式按钮图标渲染，支持 tokenpay-* 前缀为加密货币图标
+	// English: Render pay-type icons; treat tokenpay-* as crypto icon
 	$('.pay-type').each(function () {
 		let t = $(this), type = t.data('type'), name = t.data('name');
-		if (paySvgArr[type] !== undefined) {
-			t.append(paySvgArr[type] + ' ' + name);
-		} else {
-			t.append(otherSvg + ' ' + name);
+		let icon = paySvgArr[type];
+		if (!icon) {
+			if (type && type.indexOf('tokenpay-') === 0) {
+				icon = coinbaseSvg;
+			} else {
+				icon = otherSvg;
+			}
 		}
+		t.append(icon + ' ' + name);
 	}).click(function () {
 		$('.pay-type').removeClass('active')
 		$(this).toggleClass("active");
